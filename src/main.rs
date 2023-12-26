@@ -39,8 +39,8 @@ fn binary_search(data: &[u32], x: &u32) -> bool {
 struct Node {
     value: u32,
     parent: RefCell<Weak<Node>>,
-    left: RefCell<Option<Box<Node>>>,
-    right: RefCell<Option<Box<Node>>>,
+    left: Option<Box<Node>>,
+    right: Option<Box<Node>>,
 }
 
 impl Node {
@@ -48,16 +48,16 @@ impl Node {
         Node {
             value: value,
             parent: RefCell::new(Weak::new()),
-            left: RefCell::new(None),
-            right: RefCell::new(None),
+            left: None,
+            right: None,
         }
     }
     fn insert(&mut self, value: u32) {
         let new_node = || Box::new(Node::new(value));
 
         match value.cmp(&self.value) {
-            Ordering::Less => self.left.get_mut().unwrap_or_else(new_node).insert(value),
-            Ordering::Greater => self.right.borrow_mut().unwrap_or_else(new_node).insert(value),
+            Ordering::Less => self.left.get_or_insert_with(new_node).insert(value),
+            Ordering::Greater => self.right.get_or_insert_with(new_node).insert(value),
             Ordering::Equal => (),
         };
     }
@@ -72,6 +72,6 @@ fn binary_tree_sort(data: &[u32], x: &u32) -> bool {
     data.into_iter()
         .for_each(|value: &u32| root.insert(*value));
 
-    println!("{:?}", root);
+    println!("{:#?}", root);
     true
 }
