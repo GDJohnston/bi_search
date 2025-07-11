@@ -1,4 +1,6 @@
-use std::{cell::RefCell, cmp::Ordering, rc::Weak};
+mod binary_search;
+mod binary_tree;
+
 
 fn main() {
     let data = [
@@ -10,9 +12,11 @@ fn main() {
         963, 972, 975, 976, 987, 989, 996, 998,
     ];
 
+    let data2 = [10,20,30,40,50];
+
     let x = 976;
-    let found = binary_search(&data, &x);
-    binary_tree_sort(&data, &x);
+    let found = binary_search::binary_search(&data, &x);
+    binary_tree::binary_tree_sort(&data2, &x);
     if found {
         println!("found")
     } else {
@@ -20,58 +24,3 @@ fn main() {
     };
 }
 
-fn binary_search(data: &[u32], x: &u32) -> bool {
-    let mut l = 0;
-    let mut r = data.len() - 1;
-
-    while l <= r {
-        let m = (l + r) / 2; //(l.add(r) as f32).div(2.0).floor() as usize;
-        match data[m].cmp(&x) {
-            Ordering::Equal => break,
-            Ordering::Greater => r = m - 1,
-            Ordering::Less => l = m + 1,
-        }
-    }
-    l <= r
-}
-
-#[derive(Debug)]
-struct Node {
-    value: u32,
-    parent: RefCell<Weak<Node>>,
-    left: Option<Box<Node>>,
-    right: Option<Box<Node>>,
-}
-
-impl Node {
-    fn new(value: u32) -> Node {
-        Node {
-            value: value,
-            parent: RefCell::new(Weak::new()),
-            left: None,
-            right: None,
-        }
-    }
-    fn insert(&mut self, value: u32) {
-        let new_node = || Box::new(Node::new(value));
-
-        match value.cmp(&self.value) {
-            Ordering::Less => self.left.get_or_insert_with(new_node).insert(value),
-            Ordering::Greater => self.right.get_or_insert_with(new_node).insert(value),
-            Ordering::Equal => (),
-        };
-    }
-}
-
-fn binary_tree_sort(data: &[u32], x: &u32) -> bool {
-    if data.len() == 0 {
-        return false;
-    }
-
-    let mut root = Box::new(Node::new(data[0]));
-    data.into_iter()
-        .for_each(|value: &u32| root.insert(*value));
-
-    println!("{:#?}", root);
-    true
-}
