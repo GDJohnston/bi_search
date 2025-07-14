@@ -1,6 +1,7 @@
 mod binary_search;
 mod binary_tree;
 
+use binary_tree::AvlTree;
 
 fn main() {
     let data = [
@@ -16,7 +17,10 @@ fn main() {
 
     let x = 976;
     let found = binary_search::binary_search(&data, &x);
-    binary_tree::binary_tree_sort(&data2, &x);
+
+
+    let binary_tree = AvlTree::new();
+    binary_tree.load_data(&data2);
     if found {
         println!("found")
     } else {

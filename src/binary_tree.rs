@@ -1,9 +1,36 @@
 use std::{
-    cmp::{self, Ordering},
-    rc::Weak,
+    cmp::{self, Ordering}, fmt::{Debug, Display}, rc::Weak
 };
 
-#[derive(Debug, Default)]
+pub struct AvlTree {
+    root: Option<Node>,
+}
+
+impl AvlTree {
+    pub fn new() -> AvlTree {
+        AvlTree {
+            root: None,
+        }
+    }
+
+    pub fn load_data(mut self, data: &[u32]) {
+        if self.root.is_none() && data.len() >= 1 {
+            self.root = Some(Node::new(data[0]));
+        }
+
+        for element in data {
+            self.root = Some(self.root.unwrap().insert(*element));
+        }
+        // println!("{:#?}", self.root);
+        println!("{}", self.root.unwrap());
+    }
+
+    pub fn search(_search_value: u32) -> bool {
+        todo!("AVLTree search not implemented yet")
+    }
+}
+
+#[derive(Default)]
 pub struct Node {
     value: u32,
     height: u32,
@@ -100,15 +127,30 @@ impl Node {
     }
 }
 
-pub fn binary_tree_sort(data: &[u32], _x: &u32) -> bool {
-    if data.len() == 0 {
-        return false;
+impl Debug for Node {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Node").field("value", &self.value).field("left", &self.left).field("right", &self.right).finish()
     }
+}
 
-    let mut root = Node::new(data[0]);
-    for element in data {
-        root = root.insert(*element);
+impl Display for Node {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let padding = (self.height * 8  + 3) as usize;
+        let value = self.value;
+        let left_line = if self.left.is_some() {'/'} else {' '};
+        let right_line = if self.right.is_some() {'\\'} else {' '};
+
+        let mut res = writeln!(f, "{value:^padding$}");
+        if self.left.is_some() || self.right.is_some() {
+            let center = format!("{left_line}  {right_line}");
+            res = writeln!(f, "{center:^padding$}");
+        }
+        if self.left.is_some() {
+            res = Display::fmt(self.left.as_ref().unwrap(), f);
+        }
+        if self.right.is_some() {
+            res = Display::fmt(self.right.as_ref().unwrap(), f);
+        }
+        res
     }
-    println!("{:#?}", root);
-    true
 }
