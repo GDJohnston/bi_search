@@ -30,7 +30,6 @@ impl AvlTree {
     }
 }
 
-#[derive(Default)]
 pub struct Node {
     value: u32,
     height: u32,
@@ -43,7 +42,10 @@ impl Node {
     pub fn new(value: u32) -> Node {
         Node {
             value,
-            ..Default::default()
+            height: 1,
+            _parent: Weak::new(),
+            left: None,
+            right: None,
         }
     }
     pub fn insert(mut self, value: u32) -> Node {
