@@ -1,34 +1,4 @@
-use std::{
-    cmp::{self, Ordering}, fmt::{Debug, Display}, rc::Weak
-};
-
-pub struct AvlTree {
-    root: Option<Node>,
-}
-
-impl AvlTree {
-    pub fn new() -> AvlTree {
-        AvlTree {
-            root: None,
-        }
-    }
-
-    pub fn load_data(mut self, data: &[u32]) {
-        if self.root.is_none() && data.len() >= 1 {
-            self.root = Some(Node::new(data[0]));
-        }
-
-        for element in data {
-            self.root = Some(self.root.unwrap().insert(*element));
-        }
-        // println!("{:#?}", self.root);
-        println!("{}", self.root.unwrap());
-    }
-
-    pub fn search(_search_value: u32) -> bool {
-        todo!("AVLTree search not implemented yet")
-    }
-}
+use std::{cmp::{self, Ordering}, fmt::{Debug, Display}, rc::Weak};
 
 pub struct Node {
     value: u32,
@@ -91,7 +61,7 @@ impl Node {
         self.height = 1 + cmp::max(left_height, right_height);
     }
 
-    fn get_height(child: &Option<Box<Node>>) -> u32 {
+    fn get_height(child: &Option<Box<Node>>) -> u32 {// could probably be removed for more rustlike functionality
         match child {
             Some(x) => x.height,
             None => 0,
@@ -105,7 +75,7 @@ impl Node {
         // };
         let left_height  = Self::get_height(&self.left);
         let right_height = Self::get_height(&self.right);
-        (left_height as i32 - right_height as i32) as i32
+        left_height as i32 - right_height as i32
     }
 
     fn rotate_right(mut self) -> Node {

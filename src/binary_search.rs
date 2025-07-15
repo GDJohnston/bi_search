@@ -7,7 +7,7 @@ pub fn binary_search(data: &[u32], x: &u32) -> bool {
 
     while l <= r {
         let m = (l + r) / 2; //(l.add(r) as f32).div(2.0).floor() as usize;
-        match data[m].cmp(&x) {
+        match data[m].cmp(x) {
             Ordering::Equal => break,
             Ordering::Greater => r = m - 1,
             Ordering::Less => l = m + 1,
