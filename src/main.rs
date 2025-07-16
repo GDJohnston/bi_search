@@ -1,7 +1,5 @@
-mod binary_search;
-mod avl_tree;
 
-use avl_tree::AvlTree;
+use bi_search::{avl_tree::AvlTree, binary_search};
 
 fn main() {
     let data = [

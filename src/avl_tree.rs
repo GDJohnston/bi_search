@@ -1,8 +1,9 @@
+use avl_node::Node;
 
 mod avl_node;
 
 pub struct AvlTree {
-    root: Option<avl_node::Node>,
+    root: Option<Node>,
 }
 
 impl AvlTree {
@@ -14,7 +15,7 @@ impl AvlTree {
 
     pub fn load_data(mut self, data: &[u32]) {
         if self.root.is_none() && !data.is_empty() {
-            self.root = Some(avl_node::Node::new(data[0]));
+            self.root = Some(Node::new(data[0]));
         }
 
         for element in data {
