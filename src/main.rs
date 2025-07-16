@@ -11,18 +11,19 @@ fn main() {
         963, 972, 975, 976, 987, 989, 996, 998,
     ];
 
-    let data2 = [10,20,30,40,50];
+    let data2 = [10, 20, 30, 40, 50, 60];
 
     let x = 976;
     let found = binary_search::binary_search(&data, &x);
 
+    let mut binary_tree = AvlTree::new();
+    binary_tree = binary_tree.load_data(&data2);
 
-    let binary_tree = AvlTree::new();
-    binary_tree.load_data(&data2);
+    // println!("{:#?}", &binary_tree);
+    println!("{}", &binary_tree);
     if found {
         println!("found")
     } else {
         println!("failed")
     };
 }
-
