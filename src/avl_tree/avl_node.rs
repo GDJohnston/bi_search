@@ -9,6 +9,7 @@ pub struct Node {
 }
 
 impl Node {
+    /// Creates a new [`Node`].
     pub fn new(value: u32) -> Node {
         Node {
             value,
@@ -18,6 +19,12 @@ impl Node {
             right: None,
         }
     }
+
+    /// Insert value as a new [`Node`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if duplicate nodes exist which should be impossible
     pub fn insert(mut self, value: u32) -> Node {
         let new_node = || Box::new(Node::new(value));
 
@@ -38,7 +45,7 @@ impl Node {
                     self.left = Some(Box::new(left.unwrap().rotate_left()));
                     self.rotate_right()
                 }
-                Ordering::Equal => panic!(),
+                Ordering::Equal => panic!(),  // Should be impossible, would be a duplicated value
             };
         }
         if balance < -1 {
@@ -48,12 +55,13 @@ impl Node {
                     self.right = Some(Box::new(self.right.unwrap().rotate_right()));
                     self.rotate_left()
                 }
-                Ordering::Equal => panic!(),
+                Ordering::Equal => panic!(),  // Should be impossible, would be a duplicated value
             };
         }
         self
     }
 
+    /// Updates the height of this [`Node`].
     fn update_height(&mut self) {
         let left_height = Self::get_height(&self.left);
         let right_height = Self::get_height(&self.right);
@@ -61,13 +69,16 @@ impl Node {
         self.height = 1 + cmp::max(left_height, right_height);
     }
 
-    fn get_height(child: &Option<Box<Node>>) -> u32 {// could probably be removed for more rustlike functionality
+    /// Returns the height of the child [`Node`]
+    fn get_height(child: &Option<Box<Node>>) -> u32 {
+        // could probably be replaced with `is_none then` logic
         match child {
             Some(x) => x.height,
             None => 0,
         }
     }
 
+    /// Returns the balance of this [`Node`].
     fn get_balance(&self) -> i32 {
         // let left_height = match &self.left {
         //     Some(boxed_height) => boxed_height.height,
@@ -78,7 +89,13 @@ impl Node {
         left_height as i32 - right_height as i32
     }
 
+    /// Rotate right around this [`Node`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if `self.left` is [`None`].
     fn rotate_right(mut self) -> Node {
+        // @todo `Option::replace` might be better
         let mut x = self.left.take().unwrap();
         let t2 = x.right;
         self.left = t2;
@@ -87,8 +104,13 @@ impl Node {
         x.update_height();
         *x
     }
-
+    /// Rotate left around this [`Node`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if `self.right` is [`None`].
     fn rotate_left(mut self) -> Node {
+        // @todo `Option::replace` might be better
         let mut y = self.right.take().unwrap();
         let t2 = y.left;
         self.right = t2;
@@ -101,6 +123,7 @@ impl Node {
 
 impl Debug for Node {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // Custom debug to hide some fields
         f.debug_struct("Node").field("value", &self.value).field("left", &self.left).field("right", &self.right).finish()
     }
 }
