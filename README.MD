@@ -1,6 +1,8 @@
 # AVL Tree Project
 
-```
+[![Rust](https://github.com/GDJohnston/bi_search/actions/workflows/rust.yml/badge.svg?branch=master)](https://github.com/GDJohnston/bi_search/actions/workflows/rust.yml)
+
+```text
      A
    /   \
   V     L
