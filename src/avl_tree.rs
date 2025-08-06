@@ -4,7 +4,6 @@ use avl_node::Node;
 
 mod avl_node;
 
-
 #[derive(Debug)]
 pub struct AvlTree {
     root: Option<Node>,
@@ -34,7 +33,7 @@ impl AvlTree {
 
         for element in data {
             if let Some(x) = self.root {
-                self.root = Some(x.insert(*element));  
+                self.root = Some(x.insert(*element));
             }
         }
         self
@@ -43,5 +42,25 @@ impl AvlTree {
     /// Searches for a value in the tree
     pub fn search(_search_value: u32) -> bool {
         todo!("AVLTree search not implemented yet")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_DATA: [u32; 6] = [10, 20, 30, 40, 50, 60];
+
+    #[test]
+    /// Make sure we can construct an AVLTree without panicking
+    fn avltree_constructs() {
+        AvlTree::new();
+    }
+
+    #[test]
+    /// Load data into the AvlTree
+    fn avltree_load_data() {
+        let binary_tree = AvlTree::new();
+        binary_tree.load_data(&TEST_DATA);
     }
 }
