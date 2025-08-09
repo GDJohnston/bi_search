@@ -5,27 +5,32 @@ on:
     branches:
       -main
 
-
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   pre_merge:
     name: Merge Checks
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        toolchain:
-          - stable
-          - beta
-          - nightly
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        toolchain: [stable, beta, nightly]
     steps:
       - uses: actions/checkout@v4
-      - name: Build binaries in "${{ matrix.toolchain }}" mode
+      - name: Build ${{ matrix.os }} binaries using ${{ matrix.toolchain }} toolchain 
         run:  rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
       - name: Build Step Verbose
         run:  cargo build --verbose
       - name: Test Step Verbose
         run:  cargo test --verbose
+  Clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build binaries in stable mode on ubuntu-latest 
+        run:  rustup update stable && rustup default stable
+      - name: Build Step Verbose
+        run:  cargo build --verbose
       - name: Running Clippy on Build
-        run:  cargo clippy
+        run:  cargo clippy --verbose
