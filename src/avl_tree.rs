@@ -40,8 +40,12 @@ impl AvlTree {
     }
 
     /// Searches for a value in the tree
-    pub fn search(_search_value: u32) -> bool {
-        todo!("AVLTree search not implemented yet")
+    pub fn search(&self, search_value: u32) -> bool {
+        if let Some(root_node) = &self.root {
+            root_node.search(search_value)
+        } else {
+            false
+        }
     }
 }
 
@@ -62,5 +66,21 @@ mod tests {
     fn avltree_load_data() {
         let binary_tree = AvlTree::new();
         binary_tree.load_data(&TEST_DATA);
+    }
+    
+    #[test]
+    /// Load an empty array into the AvlTree
+    fn avltree_load_data_empty() {
+        let binary_tree = AvlTree::new();
+        let null_array: [u32; 0] = [];
+        binary_tree.load_data(&null_array);
+    }
+
+    #[test]
+    /// Find an expected value in the tree
+    fn avltree_finds_expected_value() {
+        let mut binary_tree = AvlTree::new();
+        binary_tree = binary_tree.load_data(&TEST_DATA);
+        binary_tree.search(30);
     }
 }

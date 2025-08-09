@@ -119,6 +119,32 @@ impl Node {
         y.update_height();
         *y
     }
+
+    /// Compares the search value to the nodes value.
+    /// 
+    /// Returns true of the values match otherwise calls
+    /// search on the left or right nodes. If there are no
+    /// more nodes in the tree and we have not matched the
+    /// search value we return false.
+    pub fn search(&self, search_value: u32) -> bool {
+        match self.value.cmp(&search_value) {
+            Ordering::Equal => true,
+            Ordering::Less => 
+            {
+                match &self.left {
+                    Some(node) => node.search(search_value),
+                    None => false,
+                }
+            },
+            Ordering::Greater =>
+            {
+                match &self.right {
+                    Some(node) => node.search(search_value),
+                    None => false,
+                }
+            },
+        }
+    }
 }
 
 impl Debug for Node {
