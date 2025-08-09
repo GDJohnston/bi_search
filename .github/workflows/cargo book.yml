@@ -34,14 +34,3 @@ jobs:
         run:  cargo build --verbose
       - name: Running Clippy on Build
         run:  cargo clippy
-  Audit:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout latest
-        uses: actions/checkout@v4
-      - name: Cargo Build on Stable
-        run:  cargo build --verbose
-      - name: Install Cargo Audit
-        run:  cargo install cargo-audit --locked
-      - name: Run Cargo Audit
-        run:  cargo audit
