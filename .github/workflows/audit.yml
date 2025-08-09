@@ -1,10 +1,9 @@
 name: Cargo Build & Audit
 
 on:
-#  schedule:
-#    # Run on the 9th of August at 20:30
-#    - cron: '30 20 9 8 *'
-  push: # temp push while confirm the rest is working
+  schedule:
+    # Run on the 9th of August at 20:55
+    - cron: '55 20 9 8 *'
 
 
 jobs:
@@ -31,7 +30,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Cargo Build Stable on ${{ runner.os }}
         run:  cargo build --verbose
-      - name: Install Cargo Audit
-        run:  cargo install cargo-audit --locked
-      - name: Run Cargo Audit
-        run:  cargo audit
+      # Commented out to reduce runners time used
+      # - name: Install Cargo Audit
+      #   run:  cargo install cargo-audit --locked
+      # - name: Run Cargo Audit
+      #   run:  cargo audit
