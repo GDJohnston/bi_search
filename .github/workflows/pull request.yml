@@ -1,0 +1,31 @@
+name: Pull Request to Main
+
+on:
+  pull_request:
+    branches:
+      -main
+
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  pre_merge:
+    name: Merge Checks
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - beta
+          - nightly
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build binaries in "${{ matrix.toolchain }}" mode
+        run:  rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+      - name: Build Step Verbose
+        run:  cargo build --verbose
+      - name: Test Step Verbose
+        run:  cargo test --verbose
+      - name: Running Clippy on Build
+        run:  cargo clippy
