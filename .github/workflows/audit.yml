@@ -2,8 +2,8 @@ name: Cargo Build & Audit
 
 on:
   schedule:
-    # Run on the 9th of August from 19:52 to 19:57
-    - cron: '52-57 19 9 8 *'
+    # Run on the 9th of August from 19:55 to 19:57
+    - cron: '55-57 19 9 8 *'
 
 jobs:
   build_and_audit:
@@ -16,6 +16,14 @@ jobs:
           - stable
           - beta
           - nightly
+    steps:
+      - name: Checkout latest
+        uses: actions/checkout@v4
+      - name: Build binaries in "${{ matrix.toolchain }}" mode
+        run:  rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+      - name: Build Step Verbose
+        run:  cargo build --verbose
+      
   Audit:
     # We don't need to audit on all OS's
     runs-on: ubuntu-latest
