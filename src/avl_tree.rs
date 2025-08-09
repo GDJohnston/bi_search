@@ -4,7 +4,7 @@ use avl_node::Node;
 
 mod avl_node;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct AvlTree {
     root: Option<Node>,
 }
