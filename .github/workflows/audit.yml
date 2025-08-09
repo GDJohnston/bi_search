@@ -2,8 +2,8 @@ name: Cargo Build & Audit
 
 on:
   schedule:
-    # Run on the 9th of August at 21:20
-    - cron: '0/10 22 9 8 *'
+    # Run every 10 minutes from 21:00 to 23:59 on the 9th of August
+    - cron: '0/10 21-23 9 8 *'
 
 jobs:
   build:
