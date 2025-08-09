@@ -1,0 +1,30 @@
+name: Cargo Build & Audit
+
+on:
+  schedule:
+    # Run on the 9th of August from 19:40 to 19:45
+    cron: '40-45 19 9 8 * *'
+
+jobs:
+  build_and_audit:
+    name: Scheduled Audit
+    runs-on: 
+        [ubuntu-latest, windows-latest, macos-latest]
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - beta
+          - nightly
+  Audit:
+    # We don't need to audit on all OS's
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest
+        uses: actions/checkout@v4
+      - name: Cargo Build on Stable
+        run:  cargo build --verbose
+      - name: Install Cargo Audit
+        run:  cargo install cargo-audit --locked
+      - name: Run Cargo Audit
+        run:  cargo audit
