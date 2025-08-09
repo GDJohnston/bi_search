@@ -1,21 +1,20 @@
 name: Cargo Build & Audit
 
 on:
-  schedule:
-    # Run on the 9th of August from 20:18 to 20:22
-    - cron: '18-22 20 9 8 *'
+#  schedule:
+#    # Run on the 9th of August at 20:30
+#    - cron: '30 20 9 8 *'
+  push: # temp push while confirm the rest is working
+
 
 jobs:
   build:
-    name: Os and Toolchain matrix build
+    name: Os and Toolchain Matrix Build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        toolchain:
-          - stable
-          - beta
-          - nightly
+        toolchain: [stable, beta, nightly]
     steps:
       - name: Checkout latest
         uses: actions/checkout@v4
