@@ -2,12 +2,12 @@ name: Cargo Build & Audit
 
 on:
   schedule:
-    # Run on the 9th of August from 19:55 to 19:57
-    - cron: '55-57 19 9 8 *'
+    # Run on the 9th of August from 20:05 to 20:10
+    - cron: '5-10 20 9 8 *'
 
 jobs:
-  build_and_audit:
-    name: Scheduled Audit
+  build:
+    name: Os and Toolchain matrix build
     runs-on: 
         [ubuntu-latest, windows-latest, macos-latest]
     strategy:
@@ -19,18 +19,18 @@ jobs:
     steps:
       - name: Checkout latest
         uses: actions/checkout@v4
-      - name: Build binaries in "${{ matrix.toolchain }}" mode
+      - name: Build binaries on ${{ runner.os }} in "${{ matrix.toolchain }}" mode
         run:  rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
       - name: Build Step Verbose
         run:  cargo build --verbose
       
   Audit:
-    # We don't need to audit on all OS's
+    # We don't need to audit on all Toolchains and OS'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout latest
         uses: actions/checkout@v4
-      - name: Cargo Build on Stable
+      - name: Cargo Build Stable on ${{ runner.os }}
         run:  cargo build --verbose
       - name: Install Cargo Audit
         run:  cargo install cargo-audit --locked
