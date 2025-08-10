@@ -33,3 +33,27 @@ jobs:
         run:  cargo build --verbose
       - name: Running Clippy on Build
         run:  cargo clippy
+  build_and_cache:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        toolchain: [stable, beta, nightly]
+    steps:
+      - uses: actions/checkout@v4
+      # My understanding is that the cache can store files such as build artifacts so we can just
+      # do partial builds when updating, this might be a good strategy for push commits which are
+      # frequent and things like cargo audit which are otherwise downloaded and built every time
+      # which takes about 3 mins. 
+      - name: Cache rust-${{ matrix.toolchain }} on ${{ matrix.os }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ matrix.os }}-rustup-${{ matrix.toolchain }}-${{ hashFiles('**/Cargo.lock') }}      
+      - name: Build binaries in "${{ matrix.toolchain }}" mode
+        run:  rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+      - name: Build Step Verbose
+        run:  cargo build --verbose
